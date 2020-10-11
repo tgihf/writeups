@@ -1,0 +1,42 @@
+challenges:
+  - name: A02
+    reward: 100
+    description: "The network service at A02-target.allyourbases.co on port 8134 contains a flag, but the output changes every time it returns. This data is comparable to an example from an IoT device. You don't need more than 2-3 connections to figure this one out. Hint: Some things don't change, like ASCII."
+    endpoint: "A02-target.allyourbases.co:8134"
+    flag: "Flag[AlwaysBeHexxing]"
+
+  - name: E09
+    reward: 100
+    description: "The network service at E09-target.allyourbases.co on port 8149 is vulnerable and asks for user input. Find a way to get the flag. Hint: Some developers are not careful with input filtering and that can cause unusual crashes or problems. Play with your input! Try python -c 'print "your input"' | nc target port"
+    endpoint: "E09-target.allyourbases.co:8149"
+    flag: "Flag[IOverWriteNaughtyBuffers]"
+
+  - name: E10
+    reward: 100
+    description: "The network service at E10-target.allyourbases.co on port 8148 was written by a developer using hashes for security. Brute force is a bad solution, but can you get authenticated to get the flag? Hint: You do not need to spin up your password cracking rig to get this one!"
+    endpoint: "E10-target.allyourbases.co:8148"
+    flag: "Flag[SearchingBeatsTheEpicCompute]"
+
+  - name: E11
+    reward: 100
+    description: "The network service at E11-target.allyourbases.co on port 8152 was written by a developer using hashes for security. They have added some security with lessons learned from a prior version. Brute force is a bad solution, but can you get authenticated to get the flag?"
+    endpoint: "E11-target.allyourbases.co:8152"
+    flag: "Flag[NearbyGuessesAreHacking]"
+
+  - name: A03
+    reward: 250
+    description: "The network service at A03-target.allyourbases.co on port 8135 contains a flag, but the output changes every time it returns. Signing can be dangerous, and insightful when analysing what seems like random data."
+    endpoint: "A03-target.allyourbases.co:8135"
+    flag: "Flag[SignOfTheTimes]"
+
+  - name: A04
+    reward: 250
+    description: "The network service at A04-target.allyourbases.co on port 8150 contains a flag, but the output is packed with some frequent but very odd characters. Looks like a really awful implementation of a padding scheme. Find the flag and submit it."
+    endpoint: "A04-target.allyourbases.co:8150"
+    flag: "Flag[IPadThereforeIAm]"
+
+  - name: C01
+    reward: 250
+    description: "The network service at C01-target.allyourbases.co on port 8147 securely exchanges a protected key, or at least the developer thought so. If you can decrypt the protected communication you can get the shared key to authenticate and win the flag."
+    endpoint: "C01-target.allyourbases.co:8147"
+    flag: "Flag[IDiDorDidNotAutoSolve]"
