@@ -109,7 +109,8 @@ Upload files to `/internal`
 
 ## Upload Form
 
-![[Pasted image 20210706213315.png]]
+![Pasted image 20210706213315](Pasted%20image%2020210706213315.png)
+
 
 ## Bypass Upload Filter
 
@@ -121,7 +122,7 @@ Upload PHP web shell `tgihf.phtml`
 
 ## Successful Web Shell Upload
 
-![[Pasted image 20210708233733.png]]
+![Pasted image 20210708233733](Pasted%20image%2020210708233733.png)
 
 ---
 
@@ -129,7 +130,7 @@ Upload PHP web shell `tgihf.phtml`
 
 ## SUID Executables
 
-![[Pasted image 20210709210129.png]]
+![Pasted image 20210709210129](Pasted%20image%2020210709210129.png)
 
 `systemctl` is SUID executable and owned by `root`
 

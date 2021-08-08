@@ -59,11 +59,11 @@ News article web application: *The Daily Bugle*. The content management system p
 
 The web application's `robots.txt`:
 
-![[Pasted image 20210712001900.png]]
+![Pasted image 20210712001900](Pasted%20image%2020210712001900.png)
 
 Of these `robots.txt` entries, `/administrator/` is the only path that returns anything useful: an administrator login form.
 
-![[Pasted image 20210712002032.png]]
+![Pasted image 20210712002032](Pasted%20image%2020210712002032.png)
 
 Joomla enumeration via `joomscan`
 
@@ -170,7 +170,7 @@ hashcat -m 3200 jonah.txt /usr/share/wordlists/SecLists/Passwords/Leaked-Databas
 
 The cracked password is `spiderman123`. `jonah`:`spiderman123` grants Joomla administrator access, but not SSH access.
 
-![[Pasted image 20210712014717.png]]
+![Pasted image 20210712014717](Pasted%20image%2020210712014717.png)
 
 # Joomla Administrator Access
 
