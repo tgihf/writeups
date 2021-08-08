@@ -1,4 +1,4 @@
-# Lab 2: Username enumeration via subtly different responses
+# [Lab 2: Username enumeration via subtly different responses](https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-subtly-different-responses)
 
 ## Description
 

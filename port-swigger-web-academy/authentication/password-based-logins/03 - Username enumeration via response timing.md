@@ -1,4 +1,4 @@
-# Lab 3: Username enumeration via response timing
+# [Lab 3: Username enumeration via response timing](https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-response-timing)
 
 ## Description
 
