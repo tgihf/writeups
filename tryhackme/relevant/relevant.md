@@ -1,6 +1,6 @@
 # [Relevant](https://tryhackme.com/room/relevant)
 
-> Enumeration of the box revealsa a writable SMB share and an IIS server on port 49663. The SMB share is browsable via the IIS server. Writing an ASPX web shell to the share and then executing it via the IIS server yields the user flag. The user has the `SeImpersonatePrivilege` privilege, which is exploited via [PrintSpoofer](https://github.com/itm4n/PrintSpoofer) for SYSTEM, yielding the root flag.
+> Enumeration of the box reveals a writable SMB share and an IIS server on port 49663. The SMB share is browsable via the IIS server. Writing an ASPX web shell to the share and then executing it via the IIS server yields the user flag. The user has the `SeImpersonatePrivilege` privilege, which is exploited via [PrintSpoofer](https://github.com/itm4n/PrintSpoofer) for SYSTEM, yielding the root flag.
 
 #windows #iis #aspx #smb #SeImpersonatePrivilege #PrintSpoofer
 
