@@ -47,7 +47,7 @@ Using BurpSuite interceptor, attempt 20 iterative logins and determine after whi
 
 After 3 failed login attempts, the web application began returning an error indicating too many requests have been made and to try again **in one minute**.
 
-![Pasted image 20210807204402](Pasted%20image%2020210807204402.png)
+![Pasted image 20210807204402](images/Pasted%20image%2020210807204402.png)
 
 ### Does a Successful Login Reset the Count?
 
@@ -55,7 +55,7 @@ Using BurpSuite interceptor, attempt 4 iterative logins. On the 3rd login attemp
 
 After executing the attack, the 4th request does not indicate IP address blocking.
 
-![Pasted image 20210807205136](Pasted%20image%2020210807205136.png)
+![Pasted image 20210807205136](images/Pasted%20image%2020210807205136.png)
 
 This indicates that the web application resets an IP address's number of failed login attempts whenever it logs in successfully. By interspersing the credentials `wiener:peter` every two entries in the username:password dictionary, the brute-force protection mechanism can be bypassed.
 

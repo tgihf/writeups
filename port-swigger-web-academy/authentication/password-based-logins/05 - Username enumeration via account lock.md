@@ -11,7 +11,7 @@ This lab is vulnerable to username enumeration. It uses account locking, but thi
 
 Use BurpSuite Intruder to send 10 login requests with an invalid username. Note that they *all* result in responses of length 3094 that each contain the string `Invalid username or password`.
 
-![](Pasted%20image%2020210808164409.png)
+![](images/Pasted%20image%2020210808164409.png)
 
 Leverage the account lockout feature to enumerate users by attempting logins with each user in the username list 10 times. Ignore responses that contain the string `Invalid username or password`.
 
@@ -44,7 +44,7 @@ The username `ajax` is the only one with responses that didn't contain the strin
 
 Under what conditions is the account unlocked, though? When an account is locked out, the application's response indicates that the account is locked for **one minute**.
 
-![](Pasted%20image%2020210808165455.png)
+![](images/Pasted%20image%2020210808165455.png)
 
 Even though the account will be locked out after three failed login attempts, attempt to brute force `ajax`'s password with the given password list. The challenge description indicates that there is a logic flaw with the way the account lockout is implemented, and perhaps that logic flaw is that even when an account is locked out, if you attempt to login with correct credentials, it will respond differently than when it is locked out and you attempt to login with incorrect credentials.
 

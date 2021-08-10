@@ -3,3 +3,4 @@
 redpwn-ctf-jun-2020/redpwn
 *.ovpn
 **/.obsidian
+.DS_Store
