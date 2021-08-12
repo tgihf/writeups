@@ -74,7 +74,7 @@ Whether the developers intended it to or not, it appears the CSRF token is actin
 
 To properly brute force the 2FA code, the request must contain a valid `session` cookie and CSRF token. A valid `session` cookie is granted in the 302 response to a successful username and password login and a valid CSRF tokens is picked up in the body of the 2FA code form. This means that for each 2FA code, a `POST` request must first be submitted to `/login` with `carlos`'s credentials, the `session` token must be extracted from the 302 response, the redirect should be followed, and the CSRF token `csrf` should be grapped from the 2FA login form, and `csrf` and `session` must be used in a `POST` request to `/login2` with the 2FA code.
 
-The following script automates this process and writes an authenticated `session` cookie into a file name `$CODE.txt`. Use the `session` cookie to access `carlos`'s account at `/my-account`.
+The following script automates this process and writes an authenticated `session` cookie into a file named `$CODE.txt`. Use the `session` cookie to access `carlos`'s account at `/my-account`.
 
 ```python
 from multiprocessing import Pool
