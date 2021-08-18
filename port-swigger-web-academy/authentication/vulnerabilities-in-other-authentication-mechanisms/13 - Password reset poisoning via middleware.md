@@ -1,4 +1,4 @@
-# Lab 13: Password reset poisoning via middleware
+# [Lab 13: Password reset poisoning via middleware](https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-reset-poisoning-via-middleware)
 
 ## Description
 

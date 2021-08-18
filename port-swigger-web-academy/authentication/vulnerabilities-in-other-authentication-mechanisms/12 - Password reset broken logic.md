@@ -1,4 +1,4 @@
-# Lab 12: Password reset broken logic
+# [Lab 12: Password reset broken logic](https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-reset-broken-logic)
 
 ## Description
 
