@@ -35,9 +35,9 @@ Connection: close
 csrf=2Syvqg2wU8bw2Tm0HWt2zFxffuBucGlz&username=tgihf&email=tgihf%40dontwannacry.com&password=blah
 ```
 
-The response from the application indicates that an account registration link to sent to the specified email address, which is inaccessible.
+The response from the application indicates that an account registration link was sent to the specified email address (`tgihf@dontwannacry.com`), which is inaccessible.
 
-It seems that to access the administrative panel, one needs to register an account with the `@dontwannacry.com` email address. The challenge's exploit server gives access to the email address `@exploit-ac4a1f8c1ffd37c280b20e5701bf000f.web-security-academy.net` and any subdomains of that domain. Perhaps the application only ensures the string `dontwannacry.com` is in the email address. If this is the case, then it may be possible to bypass this restriction by regstering an account with `dontwannacry.com` as the subdomain of `exploit-ac4a1f8c1ffd37c280b20e5701bf000f.web-security-academy.net`. Attempt to register an account with this email address.
+It seems that to access the administrative panel, one needs to register an account with the `@dontwannacry.com` email address. The challenge's exploit server gives access to all emails sent to domain `exploit-ac4a1f8c1ffd37c280b20e5701bf000f.web-security-academy.net` and any subdomains of that domain. Perhaps the application only ensures the string `dontwannacry.com` is in the email address. If this is the case, then it may be possible to bypass this restriction by regstering an account with `dontwannacry.com` as the subdomain of `exploit-ac4a1f8c1ffd37c280b20e5701bf000f.web-security-academy.net`. Attempt to register an account with this email address.
 
 ```http
 POST /register HTTP/1.1
@@ -64,6 +64,6 @@ This request successfully causes the web application to send an email confirmati
 
 Follow the link to finish registering the account. Login with the account. Unfortunately, the account doesn't have administrative access.
 
-It seems that the application only allows administrative access to users whose email addresses are of the `dontwannacry` domain. How does the application go about ensuring that the email is a part of this domain? Perhaps it just compares the last 12 characters to the email address to `dontwannacry` and if they are equal, allows the user to have administrative access.
+It seems that the application only allows administrative access to users whose email addresses are of the `dontwannacry` domain. How does the application go about ensuring that the email of the user is a part of this domain? Perhaps it just compares the last 12 characters to the email address to `dontwannacry` and if they are equal, allows the user to have administrative access.
 
 After some trial and error, it becomes clear that the application stores the user-input email address into a limited-size buffer such that if the buffer is overflowed, the application only saves the first N characters as the email address. The buffer size appears to be 255 characters. Thus, by inputting the email address `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadontwannacry.com@exploit-ac4a1f8c1ffd37c280b20e5701bf000f.web-security-academy.net`, the application sends the account registration email to the attacker-controlled email address and saves the email address as `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadontwannacry.com`. Logging in with this account grants administrative access. Delete `carlos`'s account to complete the challenge.
