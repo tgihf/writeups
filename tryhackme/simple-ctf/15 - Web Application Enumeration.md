@@ -2,7 +2,7 @@
 
 The target's TCP port 80 is running a web application served by `Apache httpd 2.4.18`.
 
-There is a `/robots.txt` file that indicates the target is running a [CUPS server](http://www.cups.org/) and disallows access to `/openemr-5_0_1_3`. This path results in a 404.
+There is a `/robots.txt` file that indicates the target is running a [CUPS server](http://www.cups.org/) and disallows access to `/openemr-5_0_1_3`. However, the path results in a 404.
 
 ```txt
 #
@@ -130,8 +130,8 @@ by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
 ===============================================================
 ```
 
-### CMS Made Simple Enumeration
+### "CMS Made Simple" Enumeration
 
-`/simple` is the home page of [CMS Made Simple](http://www.cmsmadesimple.org/), an open-source content management system.
+`/simple` is the home page of a [CMS Made Simple](http://www.cmsmadesimple.org/), instance, an open-source content management system.
 
 ![](images/Pasted%20image%2020220119214636.png)
