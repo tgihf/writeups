@@ -27,7 +27,6 @@ impl SimpleHTTPServer {
             let (tx, rx) = oneshot::channel();
             let (_addr, server) = warp::serve(route)
                 .bind_with_graceful_shutdown(self.socket_addr.clone(), async {
-                    println!("[!!!] Stopping HTTP server");
                     rx.await.ok();
                 });
             tokio::task::spawn(server);
