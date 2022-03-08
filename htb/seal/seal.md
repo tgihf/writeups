@@ -276,7 +276,7 @@ by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
 ===============================================================
 ```
 
-Interestingly, each of these redirects from HTTPS to HTTP, which this machine isn't serving. This transport layer redirect is probably the work of the Nginx reverse proxy. All requests except return a 404, except `https://seal.htb/manager/` which returns a 403 Forbidden.
+Interestingly, each of these redirects from HTTPS to HTTP, which this machine isn't serving. This transport layer redirect is probably the work of the Nginx reverse proxy. All requests return a 404, except `https://seal.htb/manager/` which returns a 403 Forbidden.
 
 ### Virtual Host Discovery
 
